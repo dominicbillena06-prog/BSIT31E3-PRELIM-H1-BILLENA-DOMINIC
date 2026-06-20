@@ -1,10 +1,145 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿using System;
+using System.Collections.Generic;
 
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net10.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+class Student
+{
+public string Name;
+public int Grade1;
+public int Grade2;
+public int Grade3;
 
-</Project>
+public double Average()
+{
+return (Grade1 + Grade2 + Grade3) / 3.0;
+}
+
+public int HighestGrade()
+{
+return Math.Max(Grade1, Math.Max(Grade2, Grade3));
+}
+}
+
+class Program
+{
+static List<Student>
+	students = new List<Student>();
+
+    static void Main()
+    {
+        while (true)
+        {
+            Console.WriteLine();
+            Console.WriteLine("===== STUDENT SYSTEM =====");
+            Console.WriteLine("1. Add Student");
+            Console.WriteLine("2. View All Students");
+            Console.WriteLine("3. Compute Average Grade");
+            Console.WriteLine("4. Find Highest Grade");
+            Console.WriteLine("5. Exit");
+            Console.WriteLine("==========================");
+
+            Console.Write("Choose an option: ");
+            string choice = Console.ReadLine();
+
+            if (choice == "1")
+            {
+                AddStudent();
+            }
+            else if (choice == "2")
+            {
+                ViewStudents();
+            }
+            else if (choice == "3")
+            {
+                ComputeClassAverage();
+            }
+            else if (choice == "4")
+            {
+                FindHighestStudent();
+            }
+            else if (choice == "5")
+            {
+                Console.WriteLine("Exiting program...");
+                Console.WriteLine("Goodbye");
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Invalid option.");
+            }
+        }
+    }
+
+    static void AddStudent()
+    {
+        Student s = new Student();
+
+        Console.Write("Enter student name: ");
+        s.Name = Console.ReadLine();
+
+        Console.Write("Enter grade 1: ");
+        s.Grade1 = int.Parse(Console.ReadLine());
+
+        Console.Write("Enter grade 2: ");
+        s.Grade2 = int.Parse(Console.ReadLine());
+
+        Console.Write("Enter grade 3: ");
+        s.Grade3 = int.Parse(Console.ReadLine());
+
+        students.Add(s);
+
+        Console.WriteLine("Student added successfully!");
+    }
+
+    static void ViewStudents()
+    {
+        foreach (var s in students)
+        {
+            Console.WriteLine($"Name: {s.Name}");
+            Console.WriteLine($"Grades: {s.Grade1}, {s.Grade2}, {s.Grade3}");
+            Console.WriteLine($"Average: {s.Average():F2}");
+            Console.WriteLine();
+        }
+    }
+
+    static void ComputeClassAverage()
+    {
+        double total = 0;
+
+        foreach (var s in students)
+        {
+            total += s.Average();
+        }
+
+        double classAvg = students.Count > 0 ? total / students.Count : 0;
+
+        Console.WriteLine("===== CLASS AVERAGE =====");
+        Console.WriteLine($"Overall Average Grade: {classAvg:F2}");
+    }
+
+    static void FindHighestStudent()
+    {
+        if (students.Count == 0)
+        {
+            Console.WriteLine("No students yet.");
+            return;
+        }
+
+        Student top = students[0];
+        int highest = top.HighestGrade();
+
+        foreach (var s in students)
+        {
+            int h = s.HighestGrade();
+
+            if (h > highest)
+            {
+                highest = h;
+                top = s;
+            }
+        }
+
+        Console.WriteLine("===== HIGHEST GRADE =====");
+        Console.WriteLine($"Top Student: {top.Name}");
+        Console.WriteLine($"Highest Grade: {highest}");
+    }
+}
